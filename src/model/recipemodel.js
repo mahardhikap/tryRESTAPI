@@ -13,6 +13,19 @@ const getRecipeSearch = async (searchData) => {
         })
     })
 }
+const getRecipeSort = async (sortData) => {
+    return new Promise((resolve,reject)=>{
+    const{sortby, sort} = sortData
+    console.log('Model: Get recipe table sort')
+        pool.query(`SELECT * FROM recipe ORDER BY ${sortby} ${sort}`,(err,results)=>{
+            if(!err){
+                resolve(results)
+            } else{
+                reject(err)
+            }
+        })
+    })
+}
 
 const getRecipeCategoryUserAll = async () => {
     return new Promise((resolve,reject)=>{
@@ -88,5 +101,6 @@ module.exports = {
     updateRecipeTable,
     deleteRecipeTableById,
     getRecipeCategoryUserAll,
-    getRecipeSearch
+    getRecipeSearch,
+    getRecipeSort
 }

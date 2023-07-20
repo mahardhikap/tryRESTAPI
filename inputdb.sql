@@ -35,7 +35,8 @@ INSERT INTO recipe (id, title, photo, ingredients, category, created_by) VALUES 
 
 --filter join --
 SELECT recipe.id, recipe.title, recipe.photo, recipe.ingredients, category.name AS category, users.username AS created_by FROM recipe JOIN category ON recipe.category = category.id JOIN users ON recipe.created_by = users.id;
-
+--filter sort --
+SELECT * FROM recipe ORDER BY created_at DESC
 --get recipe table--
 SELECT * FROM recipe;
 --get category table--

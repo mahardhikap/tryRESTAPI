@@ -1,4 +1,4 @@
-const {getRecipeTable, addRecipeTable, updateRecipeTable, deleteRecipeTableById, getRecipeCategoryUserAll, getRecipeSearch} = require('../model/recipemodel')
+const {getRecipeTable, addRecipeTable, updateRecipeTable, deleteRecipeTableById, getRecipeCategoryUserAll, getRecipeSearch, getRecipeSort} = require('../model/recipemodel')
 const {checkIdRecipe} = require('../helper/validate')
 
 const recipeController = {
@@ -23,6 +23,27 @@ const recipeController = {
         } catch (error) {
           console.error(`Error ketika hendak mengambil data recipe by search: ${error.message}`);
           res.status(500).json({ "status": 500, "message": "Error terjadi ketika hendak akan mengambil data recipe by search" });
+        }
+    },
+    getRecipeSorted : async (req, res) => {
+        console.log('Control: Running searching')
+        const{sortby, sort} = req.query
+        try {
+        let dataSort = {
+            sortby: sortby || 'created_at',
+            sort: sort || 'ASC'
+        }
+          const resultRecipeSort = await getRecipeSort(dataSort);
+          if (resultRecipeSort.rowCount > 0) {
+              res.status(200).json({ "status": 200, "message": "Mendapatkan semua data recipe by sort berhasil", data: resultRecipeSort.rows });
+              console.log(resultRecipeSort.rows)
+            } else {
+                res.status(200).json({ "status": 200, "message": "Mendapatkan semua data recipe by sort berhasil", data: "Data tidak ditemukan" });
+                console.log('Data tidak ditemukan')
+          }
+        } catch (error) {
+          console.error(`Error ketika hendak mengambil data recipe by sort: ${error.message}`);
+          res.status(500).json({ "status": 500, "message": "Error terjadi ketika hendak akan mengambil data recipe by sort" });
         }
     },
     getRecipeCategoryUserOnly: async (req, res) => {

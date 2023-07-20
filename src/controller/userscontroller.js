@@ -1,4 +1,5 @@
-const {getUsersTable, addUsersTable, checkIfIdExists, updateUsersTable, deleteUsersTableById} = require('../model/usersmodel')
+const {getUsersTable, addUsersTable, updateUsersTable, deleteUsersTableById} = require('../model/usersmodel')
+const {checkIdUser} = require('../helper/validate')
 const bcrypt = require('bcryptjs');
 
 const usersController = {
@@ -19,7 +20,7 @@ const usersController = {
         console.log('Control: Post data users')
         const {id, username, email, password} = req.body
         try {
-            const isIdExists = await checkIfIdExists(id);
+            const isIdExists = await checkIdUser(id);
             if (isIdExists) {
                  res.status(400).json({ "status": 400, "message": "ID sudah digunakan" });
                  return console.log('Control: Tidak bisa membuat user, ditemukan indikasi id yang sama')

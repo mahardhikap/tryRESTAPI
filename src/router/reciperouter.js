@@ -1,10 +1,11 @@
-const {getRecipeOnly, addRecipeOnly, updateRecipeOnly, deleteRecipeById, getRecipeCategoryUserOnly, getRecipeSearching} = require('../controller/recipecontroller')
+const {getRecipeOnly, addRecipeOnly, updateRecipeOnly, deleteRecipeById, getRecipeCategoryUserOnly, getRecipeSearching, getRecipeSorted} = require('../controller/recipecontroller')
 const app = require('express')
 const router = app.Router()
 
 
-router.get('/all',getRecipeCategoryUserOnly)
-router.get('/',getRecipeSearching)
+router.get('/joined',getRecipeCategoryUserOnly)
+router.get('/sorted',getRecipeSorted)
+router.get('/searched',getRecipeSearching)
 router.get('/',getRecipeOnly)
 router.post('/',addRecipeOnly)
 router.put('/:id',updateRecipeOnly)
