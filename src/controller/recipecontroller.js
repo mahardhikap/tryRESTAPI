@@ -17,7 +17,7 @@ const recipeController = {
               res.status(200).json({ "status": 200, "message": "Mendapatkan semua data recipe by search berhasil", data: resultGetRecipeSearch.rows });
               console.log(resultGetRecipeSearch.rows)
             } else {
-                res.status(200).json({ "status": 200, "message": "Mendapatkan semua data recipe by search berhasil", data: "Data tidak ditemukan" });
+                res.status(404).json({ "status": 404, "message": "Data tidak ditemukan", data: "Data tidak ditemukan" });
                 console.log('Data tidak ditemukan')
           }
         } catch (error) {
@@ -27,18 +27,20 @@ const recipeController = {
     },
     getRecipeSorted : async (req, res) => {
         console.log('Control: Running searching')
-        const{sortby, sort} = req.query
+        const{sortby, sort, offset, limit} = req.query
         try {
         let dataSort = {
             sortby: sortby || 'created_at',
-            sort: sort || 'ASC'
+            sort: sort || 'ASC',
+            offset: offset || 0,
+            limit: limit || 5
         }
           const resultRecipeSort = await getRecipeSort(dataSort);
           if (resultRecipeSort.rowCount > 0) {
               res.status(200).json({ "status": 200, "message": "Mendapatkan semua data recipe by sort berhasil", data: resultRecipeSort.rows });
               console.log(resultRecipeSort.rows)
             } else {
-                res.status(200).json({ "status": 200, "message": "Mendapatkan semua data recipe by sort berhasil", data: "Data tidak ditemukan" });
+                res.status(404).json({ "status": 404, "message": "Data tidak ditemukan", data: "Data tidak ditemukan" });
                 console.log('Data tidak ditemukan')
           }
         } catch (error) {
@@ -50,9 +52,12 @@ const recipeController = {
         console.log('Control: Running get all recipe category user table')
         try {
           const resultGetRecipeAll = await getRecipeCategoryUserAll();
-          if (resultGetRecipeAll) {
+          if (resultGetRecipeAll.rowCount > 0) {
               res.status(200).json({ "status": 200, "message": "Mendapatkan semua data recipe category user berhasil", data: resultGetRecipeAll.rows });
               console.log(resultGetRecipeAll.rows);
+          } else {
+            res.status(404).json({ "status": 404, "message": "Data tidak ditemukan", data: "Data tidak ditemukan" });
+            console.log('Data tidak ditemukan')
           }
         } catch (error) {
           console.error(`Error ketika hendak mengambil data all recipe category user: ${error.message}`);
@@ -63,9 +68,12 @@ const recipeController = {
         console.log('Control: Running get recipe table')
         try {
           const resultGetRecipe = await getRecipeTable();
-          if (resultGetRecipe) {
+          if (resultGetRecipe.rowCount > 0) {
               res.status(200).json({ "status": 200, "message": "Mendapatkan data recipe berhasil", data: resultGetRecipe.rows });
               console.log(resultGetRecipe.rows);
+          } else {
+            res.status(404).json({ "status": 404, "message": "Data tidak ditemukan", data: "Data tidak ditemukan" });
+            console.log('Data tidak ditemukan')
           }
         } catch (error) {
           console.error(`Error ketika hendak mengambil data resep: ${error.message}`);
@@ -112,8 +120,13 @@ const recipeController = {
                 created_by: parseInt(created_by)
             }
             const resultUpdateRecipe = await updateRecipeTable(dataUpdateRecipe)
-            res.status(200).json({"status":200,"message":"Update data recipe",updateData:resultUpdateRecipe.rows})
-            console.log(resultUpdateRecipe.rows)
+            if(resultUpdateRecipe.rowCount > 0){
+              res.status(200).json({"status":200,"message":"Update data recipe",updateData:resultUpdateRecipe.rows})
+              console.log(resultUpdateRecipe.rows)
+            } else {
+              res.status(404).json({ "status": 404, "message": "Data tidak ditemukan", data: "Data tidak ditemukan" });
+              console.log('Data tidak ditemukan')
+            }
         } catch (error) {
             console.error(`Error ketika hendak update data recipe: ${error.message}`)
             res.status(500).json({"status":500,"message":"Error terjadi ketika hendak akan update data recipe"})
@@ -127,8 +140,13 @@ const recipeController = {
                 id: parseInt(id)
             }
             const resultDeleteRecipe = await deleteRecipeTableById(dataDeleteRecipe)
-            res.status(200).json({"status":200,"message":"Delete data recipe success", deleteData:resultDeleteRecipe.rows})
-            console.log(resultDeleteRecipe.rows)
+            if(resultDeleteRecipe.rowCount > 0){
+              res.status(200).json({"status":200,"message":"Delete data recipe success", deleteData:resultDeleteRecipe.rows})
+              console.log(resultDeleteRecipe.rows)
+            } else {
+              res.status(404).json({ "status": 404, "message": "Data tidak ditemukan", data: "Data tidak ditemukan" });
+              console.log('Data tidak ditemukan')
+            }
         } catch (error) {
             console.error(`Error ketika hendak hapus data recipe: ${error.message}`)
             res.status(500).json({"status":500,"message":"Error terjadi ketika hendak akan hapus data recipe"})

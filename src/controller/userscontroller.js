@@ -46,11 +46,12 @@ const usersController = {
         const {id} = req.params
         const {username, email, password} = req.body
         try {
+            const userHash = await bcrypt.hash(password, 10)
             let dataUpdateUsers = {
                 id: parseInt(id),
                 username: username,
                 email: email,
-                password: password
+                password: userHash
             }
             const resultUpdateUsers = await updateUsersTable(dataUpdateUsers)
             res.status(200).json({"status":200,"message":"update data users",updateData:resultUpdateUsers.rows})
@@ -68,8 +69,13 @@ const usersController = {
                 id: parseInt(id)
             }
             const resultDeleteUsers = await deleteUsersTableById(dataDeleteUsers)
-            res.status(200).json({"status":200,"message":"Delete data users berhasil", deleteData:resultDeleteUsers.rows})
-            console.log(resultDeleteUsers.rows)
+            if(resultDeleteUsers){
+                res.status(200).json({"status":200,"message":"Delete data users berhasil", deleteData:resultDeleteUsers.rows})
+                console.log(resultDeleteUsers.rows)
+            } else {
+                res.status(404).json({ "status": 404, "message": "Data tidak ditemukan", data: "Data tidak ditemukan" });
+                console.log('Data tidak ditemukan')
+            }
         } catch (error) {
             console.error(`Error ketika hendak hapus data users: ${error.message}`)
             res.status(500).json({"status":500,"message":"Error terjadi ketika hendak akan hapus data users"})

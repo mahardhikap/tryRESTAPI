@@ -15,9 +15,9 @@ const getRecipeSearch = async (searchData) => {
 }
 const getRecipeSort = async (sortData) => {
     return new Promise((resolve,reject)=>{
-    const{sortby, sort} = sortData
+    const{sortby, sort, offset, limit} = sortData
     console.log('Model: Get recipe table sort')
-        pool.query(`SELECT * FROM recipe ORDER BY ${sortby} ${sort}`,(err,results)=>{
+        pool.query(`SELECT * FROM recipe ORDER BY ${sortby} ${sort} OFFSET ${offset} LIMIT ${limit}`,(err,results)=>{
             if(!err){
                 resolve(results)
             } else{

@@ -21,7 +21,7 @@ CREATE TABLE recipe (
     photo VARCHAR(64),
     ingredients TEXT NOT NULL,
     category INT,
-    created_by INT NOT NULL,
+    created_by INT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id),
